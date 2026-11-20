@@ -1,0 +1,10 @@
+﻿DSH Next 启动动画 · Windows x64
+
+1. 先打开一次已安装的 DSH Next，为它创建 desktop Profile。
+2. 从 DSH 的「应用」菜单选择「退出」。
+3. 解压整个 ZIP，双击「安装.cmd」。
+4. 使用桌面的「DSH Next 白色启动」，或者由安装器更新的现有「DSH Next」快捷方式。
+
+C++ 启动器使用 Direct2D 和 DirectWrite 实时绘制。运行不依赖 Python、图片帧资源或额外的 VC++ 运行库。程序未签名。
+启动器和插件安装包保存在 DSH desktop Profile 的 plugin-data/dsh-hello-splash 下。安装完成后，可以删除解压目录。
+已实测 DSH Next 2.0.24-next 和 DSH Runtime 0.2.2-rc.5。若 Profile 包含第三方扩展，离线安装需要现有依赖已缓存。

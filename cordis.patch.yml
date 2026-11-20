@@ -1,0 +1,4 @@
+# A single profile-managed bundle row. Preferences are stored in plugin-data.
+- insert:
+    - id: hello-splash
+      name: dsh-hello-splash

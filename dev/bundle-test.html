@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>bundle smoke test</title>
+<style>body{font:13px/1.6 ui-monospace,monospace;padding:16px;background:#101014;color:#d8d8e0}pre{white-space:pre-wrap}em{color:#8f8}</style>
+</head>
+<body>
+<pre id="out">loading…</pre>
+<script>
+  // Minimal host shim: the real DSH client provides React and a Cordis context.
+  const log = []
+  const say = (line) => { log.push(line); document.getElementById('out').textContent = log.join('\n') }
+
+  const React = {
+    createElement: (type, props, ...children) => ({ type, props, children }),
+    useRef: () => ({ current: null }),
+    useEffect: () => {},
+    useSyncExternalStore: (subscribe, getSnapshot) => getSnapshot(),
+  }
+
+  window.__ModuleLoader__ = {
+    load({ id, factory }) {
+      say('module loaded: ' + id)
+      try {
+        const mod = factory((name) => {
+          if (name === 'react') return React
+          throw new Error('unexpected require: ' + name)
+        })
+        say('factory ok · inject=' + JSON.stringify(mod.inject) + ' · apply=' + typeof mod.apply)
+        const registrations = []
+        const ctx = {
+          effect(fn) { const dispose = fn(); return typeof dispose === 'function' ? dispose : () => {} },
+          slots: {
+            inject(name, cb) { say('slots.inject(' + name + ')'); return cb() },
+            register(options, component) { registrations.push({ options, component }); say('slots.register(' + options.name + ' id=' + options.id + ' order=' + options.order + ')'); return () => {} },
+          },
+        }
+        mod.apply(ctx)
+        say('apply ok · registrations=' + registrations.length)
+        say('overlay component=' + typeof registrations[0].component + ' settings component=' + typeof registrations[1].component)
+        const controller = window.__dshHelloSplash
+        say('debug handle=' + JSON.stringify(controller && { version: controller.version, settings: controller.settings && controller.settings() }))
+        say('DONE')
+      } catch (error) {
+        say('FAILED: ' + error.message + '\n' + (error.stack || '').split('\n').slice(0, 4).join('\n'))
+      }
+    },
+  }
+</script>
+<script src="../client.js"></script>
+</body></html>

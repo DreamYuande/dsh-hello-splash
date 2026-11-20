@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Hello splash">
+  <defs>
+    <linearGradient id="hs-rainbow" x1="0" y1="32" x2="64" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ECA52A"/>
+      <stop offset="0.2" stop-color="#EC7189"/>
+      <stop offset="0.4" stop-color="#C76CC3"/>
+      <stop offset="0.6" stop-color="#9272D8"/>
+      <stop offset="0.8" stop-color="#528ED2"/>
+      <stop offset="1" stop-color="#2AA99D"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#FFFFFF"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.5" fill="none" stroke="#EDEDF0" stroke-width="1.5"/>
+  <path d="M11 41c3.2-13.5 6.4-13.5 9.6 0s6.4 13.5 9.6 0 6.4-13.5 9.6 0"
+        fill="none" stroke="url(#hs-rainbow)" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="46.5" cy="24" r="2.6" fill="url(#hs-rainbow)"/>
+</svg>

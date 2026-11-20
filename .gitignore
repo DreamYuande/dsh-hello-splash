@@ -1,0 +1,6 @@
+/client.js
+/launcher/DSHNextWelcome.exe
+/.release/
+/node_modules/
+*.tgz
+*.log

@@ -1,0 +1,56 @@
+{
+  "name": "dsh-hello-splash",
+  "version": "1.4.1",
+  "private": true,
+  "description": "White Apple-style welcome splash for DeepSeek Harness Next: a rainbow cursive line writes itself, then reassembles into the DSH whale mark.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "config.js",
+    "client.js",
+    "build.mjs",
+    "cordis.patch.yml",
+    "src",
+    "locale",
+    "docs",
+    "icon.svg",
+    "launcher",
+    "dev/export-native-geometry.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node --check client.js && node --check index.js"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-slots"
+      ]
+    },
+    "manifestVersion": 1
+  },
+  "engines": {
+    "dsh": ">=0.2.2-rc.5 <0.3",
+    "node": ">=20"
+  },
+  "repository": {
+    "url": "https://github.com/DreamYuande/dsh-hello-splash.git",
+    "type": "git"
+  }
+}

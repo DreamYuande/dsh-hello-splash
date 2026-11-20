@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Hello splash",
+    "description": "A white Apple-style welcome: a rainbow cursive line writes itself, gathers, and reassembles into the DSH whale mark. Plays once per launch, Esc skips, preview from Settings.",
+    "detail": "docs/DETAIL.md"
+  }
+}

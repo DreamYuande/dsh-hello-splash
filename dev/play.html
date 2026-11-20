@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>splash dev player</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #f2f2f4; font-family: system-ui; }
+  #stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .hud { position: fixed; left: 12px; bottom: 10px; font: 12px/1.5 ui-monospace, monospace; color: #666; background: rgba(255,255,255,.86); padding: 6px 10px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.12); z-index: 2147483600 }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="hud" id="hud">idle</div>
+<script src="../src/00-core.js"></script>
+<script src="../src/10-script.js"></script>
+<script src="../src/20-logo.js"></script>
+<script src="../src/30-scene.js"></script>
+<script>
+  const params = new URLSearchParams(location.search)
+  const config = {
+    text: params.get('text') ?? 'Welcome to DSH.',
+    background: params.get('bg') ?? '#FFFFFF',
+    duration: Number(params.get('duration') ?? 3600),
+    escSkip: params.get('esc') !== 'off',
+    morph: params.get('morph') !== 'off',
+    subtitle: params.get('subtitle') !== 'off',
+  }
+
+  const realRaf = window.requestAnimationFrame.bind(window)
+  const realCancel = window.cancelAnimationFrame.bind(window)
+  let clock = 0
+  let queue = []
+  let scene = null
+  const stage = document.getElementById('stage')
+  const hud = document.getElementById('hud')
+
+  /** Deterministic clock: the scene asks for frames, the harness answers. */
+  function installFake() {
+    window.requestAnimationFrame = (cb) => { queue.push(cb); return queue.length }
+    window.cancelAnimationFrame = () => { queue = [] }
+  }
+
+  function rebuild() {
+    if (scene) scene.dispose()
+    stage.innerHTML = ''
+    queue = []
+    clock = 0
+    scene = HS.createScene(config, { onDone: () => { hud.textContent = 'done' } })
+    scene.element.style.position = 'absolute'
+    stage.appendChild(scene.element)
+    scene.play()
+  }
+
+  function step(ms) {
+    clock += ms
+    const pending = queue
+    queue = []
+    for (const cb of pending) cb(clock)
+    hud.textContent = `t=${clock}ms`
+  }
+
+  /** Advance the deterministic clock to an absolute time. */
+  window.__goto = (target) => {
+    installFake()
+    rebuild()
+    step(0)
+    while (clock < target && queue.length > 0) step(Math.min(16, target - clock))
+    return { clock, queued: queue.length }
+  }
+
+  window.__advance = (target) => step(target - clock)
+
+  /** Real time playback (watch the actual 3.6s). */
+  window.__realtime = () => {
+    window.requestAnimationFrame = realRaf
+    window.cancelAnimationFrame = realCancel
+    rebuild()
+    hud.textContent = 'real-time'
+    return 'real-time'
+  }
+
+  window.__scene = () => scene
+
+  installFake()
+  rebuild()
+</script>
+</body></html>
+
